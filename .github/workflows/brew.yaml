@@ -1,0 +1,18 @@
+name: Release new version to Brew
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: Release new version to homebrew/cask
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Update Homebrew Cask
+        uses: macauley/action-homebrew-bump-cask@v1
+        with:
+          token: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }} #! Add this secret to your repository
+          cask: jamie
+          tap: homebrew/cask
