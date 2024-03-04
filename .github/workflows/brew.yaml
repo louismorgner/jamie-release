@@ -13,14 +13,12 @@ jobs:
 
     steps:
       - name: Install Brew
-        run: |
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Get latest tag
-        id: get_tag
         run: echo TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
 
       - name: Add PAT to session
