@@ -3,7 +3,7 @@ name: Release new version to Brew
 on:
   release:
     types: [published]
-  
+
   workflow_dispatch:
 
 jobs:
@@ -12,9 +12,17 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Update Homebrew Cask
-        uses: macauley/action-homebrew-bump-cask@v1
-        with:
-          token: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }} #! Add this secret to your repository
-          cask: jamie
-          tap: homebrew/cask
+      - name: Install Brew
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get latest tag
+        id: get_tag
+        run: echo TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
+
+      - name: Bump cask
+        run: |
+          brew bump-cask-pr jamie --version ${{ env.TAG }}
