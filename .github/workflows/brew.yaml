@@ -12,8 +12,9 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Install Brew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - name: Install Brew and then GH
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && brew install gh
+
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,6 +33,7 @@ jobs:
           echo 'export HOMEBREW_GITHUB_API_TOKEN=${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}'
           echo 'export HOMEBREW_GITHUB_API_TOKEN=${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}' >> $GITHUB_ENV
           echo 'export HOMEBREW_GITHUB_API_TOKEN=${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}' >> /Users/runner/.bash_profile
+          echo ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }} | gh auth login --with-token
 
       - name: Bump cask
         run: brew bump-cask-pr jamie --version ${{ env.TAG }}
