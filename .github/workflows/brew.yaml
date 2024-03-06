@@ -34,6 +34,9 @@ jobs:
           echo 'export HOMEBREW_GITHUB_API_TOKEN=${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}' >> $GITHUB_ENV
           echo 'export HOMEBREW_GITHUB_API_TOKEN=${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}' >> /Users/runner/.bash_profile
           echo ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }} | gh auth login --with-token
+          git config --global user.name "Anton Engelhardt"
+          git config user.email "antoncengelhardt@icloud.com"
+          gh auth status
 
       - name: Bump cask
         run: brew bump-cask-pr jamie --version ${{ env.TAG }}
