@@ -25,15 +25,11 @@ jobs:
         with:
           username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'antonengelhardt' }}
 
-      - name: Get list of autobump casks
-        id: autobump
-        run: echo "autobump_list=$(xargs < ".github/autobump.txt")" >> "$GITHUB_OUTPUT"
-
       - name: Bump casks
         uses: Homebrew/actions/bump-packages@master
         continue-on-error: true
         with:
           token: ${{ secrets.HOMEBREW_CASK_REPO_WORKFLOW_TOKEN }}
-          casks: ${{ github.event.inputs.casks || steps.autobump.outputs.autobump_list }}
+          casks: jamie
         env:
           HOMEBREW_TEST_BOT_AUTOBUMP: 1
