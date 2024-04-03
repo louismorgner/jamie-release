@@ -23,7 +23,7 @@ jobs:
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master
         with:
-          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'antonengelhardt' }}
+          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'louismorgner' }}
 
       - name: Bump casks
         uses: Homebrew/actions/bump-packages@master
