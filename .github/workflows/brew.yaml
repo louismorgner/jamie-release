@@ -12,17 +12,24 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Install Brew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+        with:
+          core: false
+          cask: true
+          test-bot: false
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Configure Git user
+        uses: Homebrew/actions/git-user-config@master
+        with:
+          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'louismorgner' }}
 
-      - name: Get latest tag
-        run: echo TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
-
-      - name: Add PAT to session
-        run: echo 'export HOMEBREW_GITHUB_API_TOKEN=${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}' >> /Users/runner/.bash_profile
-
-      - name: Bump cask
-        run: brew bump-cask-pr jamie --version ${{ env.TAG }}
+      - name: Bump casks
+        uses: Homebrew/actions/bump-packages@master
+        continue-on-error: true
+        with:
+          token: ${{ secrets.HOMEBREW_CASK_REPO_WORKFLOW_TOKEN }}
+          casks: jamie
+        env:
+          HOMEBREW_TEST_BOT_AUTOBUMP: 1
